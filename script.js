@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "games": "We'll have classic pool games, possibly limbo, and other fun activities!",
         "host": "Adam is the birthday host!",
         "birthday": "It's Adam's 42nd Annual Birthday!",
+        "wear": "It's Adam's Birthday - think something like a sexy thong.",
         "hello": "Aloha! How can I help you with the party details?",
         "hi": "Aloha! How can I help you with the party details?",
         "party": "It's a Tiki-themed pool party celebrating Adam's 42nd birthday!",
