@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "party": "It's a Tiki-themed pool party celebrating Adam's 42nd birthday!",
         "thank you": "You're welcome! See you there!",
         "thanks": "You're welcome! See you there!"
+        "spain": "Sorry, this is an all-American Tiki Party.",
     };
 
     function sendMessage() {
