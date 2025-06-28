@@ -1,12 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <!-- React and ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Framer Motion for animation (optional) -->
+    <script src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
+    <!-- Lucide React for GitHub icon (optional, or use SVG inline) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <!-- Google Fonts for Tiki Vibe -->
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Fredoka+One&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adam's 42nd Annual Birthday Tiki Pool Party!</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Balsamiq+Sans:wght@400;700&display=swap" rel="stylesheet">
     </head>
+    <div id="tiki-concierge-root"></div>
+
+    <script>
+const { useState } = React;
+
+function TikiConcierge() {
+  const tikiColors = {
+    primary: "#f59e42",
+    accent: "#2ec4b6",
+    pink: "#fa5a78",
+    green: "#37b24d",
+    sand: "#fff4e0",
+  };
+  const questions = [
+    "What’s your name, islander?",
+    "How many guests are paddling over?",
+    "Any favorite tiki treats or allergies?",
+    "Questions for the host?"
+  ];
+
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [input, setInput] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleNext = () => {
+    if (input.trim() === "") return;
+    setAnswers([...answers, input]);
+    setInput("");
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      setSubmitted(true);
+      setTimeout(() => {
+        setStep(0);
+        setAnswers([]);
+        setSubmitted(false);
+      }, 5000);
+    }
+  };
+
+  return React.createElement(
+    "div",
+    {
+      style: {
+        position: "fixed",
+        bottom: 32,
+        right: 32,
+        zIndex: 1000,
+        maxWidth: 340,
+        background: tikiColors.sand,
+        borderRadius: 24,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.17)",
+        border: `4px solid ${tikiColors.primary}`,
+        fontFamily: "'Pacifico', 'Fredoka One', Arial, sans-serif",
+      }
+    },
+    React.createElement(
+      "div",
+      { style: { padding: "1.25rem 1.5rem", display: "flex", flexDirection: "column", gap: "1rem" } },
+      React.createElement(
+        "div",
+        { style: { display: "flex", alignItems: "center", gap: 8 } },
+        React.createElement("span", { style: { fontSize: 26 } }, "🌺"),
+        React.createElement("span", {
+          style: {
+            fontWeight: 700,
+            fontSize: 20,
+            color: tikiColors.primary,
+            letterSpacing: 1
+          }
+        }, "Tiki Concierge")
+      ),
+      submitted
+        ? React.createElement(
+            "div",
+            { style: { textAlign: "center", padding: "2rem 0" } },
+            React.createElement("div", { style: { fontSize: 32 } }, "🍹 Mahalo!"),
+            React.createElement("div", { style: { marginTop: 8, color: tikiColors.green, fontWeight: 500 } }, "Your RSVP is in—can’t wait to see you!"),
+            React.createElement("div", { style: { marginTop: 6, color: tikiColors.pink, fontSize: 13 } }, "Watch your inbox for island updates.")
+          )
+        : React.createElement(
+            React.Fragment,
+            null,
+            React.createElement(
+              "div",
+              {
+                style: {
+                  fontSize: 16,
+                  color: tikiColors.green,
+                  fontFamily: "'Fredoka One', Arial, sans-serif"
+                }
+              },
+              questions[step]
+            ),
+            React.createElement(
+              "form",
+              {
+                onSubmit: e => { e.preventDefault(); handleNext(); },
+                style: { display: "flex", gap: 8 }
+              },
+              React.createElement("input", {
+                value: input,
+                onChange: e => setInput(e.target.value),
+                placeholder: "Type your answer...",
+                style: {
+                  flex: 1,
+                  padding: "10px 14px",
+                  borderRadius: 8,
+                  border: `2px solid ${tikiColors.accent}`,
+                  fontSize: 15,
+                  outline: "none",
+                  background: "#fff"
+                }
+              }),
+              React.createElement(
+                "button",
+                {
+                  type: "submit",
+                  style: {
+                    background: tikiColors.primary,
+                    color: "#fff",
+                    fontWeight: 700,
+                    border: "none",
+                    borderRadius: 10,
+                    padding: "10px 22px",
+                    fontSize: 16,
+                    cursor: "pointer",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.09)",
+                    transition: "background 0.2s"
+                  }
+                },
+                step === questions.length - 1 ? "Send 🍍" : "Next ➡️"
+              )
+            )
+          ),
+      React.createElement(
+        "a",
+        {
+          href: "https://github.com/adambrookins/adams-tiki-party",
+          target: "_blank",
+          rel: "noopener noreferrer",
+          style: {
+            display: "flex",
+            alignItems: "center",
+            marginTop: 14,
+            fontSize: 14,
+            color: tikiColors.pink,
+            textDecoration: "none",
+            fontWeight: 500,
+            gap: 5,
+            opacity: 0.85
+          }
+        },
+        React.createElement("span", { style: { display: "inline-block", marginRight: 5, fontSize: 17 } }, "🌴"),
+        "View on GitHub"
+      )
+    )
+  );
+}
+
+// Mount to DOM
+ReactDOM.createRoot(document.getElementById('tiki-concierge-root')).render(React.createElement(TikiConcierge));
+</script>
+
 <body>
     <header>
         <div class="header-content">
