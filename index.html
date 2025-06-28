@@ -19,35 +19,48 @@
     <div id="tiki-concierge-root"></div>
 
     <script>
-const { useState } = React;
+<script>
+const webhookURL = "https://script.google.com/macros/s/AKfycbxnD0_G-iURtWiVhKkXcL2o_Shk_0e8i2iYM7aS8cqLgdie73-jPYiFomybSf_BS0tb/exec";
+
+const tikiColors = {
+  primary: "#f59e42",
+  accent: "#2ec4b6",
+  pink: "#fa5a78",
+  green: "#37b24d",
+  sand: "#fff4e0",
+};
+const questions = [
+  "What’s your name, islander?",
+  "How many guests are paddling over?",
+  "Any favorite tiki treats or allergies?",
+  "Questions for the host?"
+];
 
 function TikiConcierge() {
-  const tikiColors = {
-    primary: "#f59e42",
-    accent: "#2ec4b6",
-    pink: "#fa5a78",
-    green: "#37b24d",
-    sand: "#fff4e0",
-  };
-  const questions = [
-    "What’s your name, islander?",
-    "How many guests are paddling over?",
-    "Any favorite tiki treats or allergies?",
-    "Questions for the host?"
-  ];
-
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [input, setInput] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [step, setStep] = React.useState(0);
+  const [answers, setAnswers] = React.useState([]);
+  const [input, setInput] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
 
   const handleNext = () => {
     if (input.trim() === "") return;
-    setAnswers([...answers, input]);
+    const nextAnswers = [...answers, input];
+    setAnswers(nextAnswers);
     setInput("");
     if (step < questions.length - 1) {
       setStep(step + 1);
     } else {
+      // POST to Google Sheets
+      fetch(webhookURL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          name: nextAnswers[0],
+          guests: nextAnswers[1],
+          diet: nextAnswers[2],
+          question: nextAnswers[3],
+        })
+      });
       setSubmitted(true);
       setTimeout(() => {
         setStep(0);
@@ -181,6 +194,8 @@ function TikiConcierge() {
 ReactDOM.createRoot(document.getElementById('tiki-concierge-root')).render(React.createElement(TikiConcierge));
 </script>
 
+
+            
 <body>
     <header>
         <div class="header-content">
